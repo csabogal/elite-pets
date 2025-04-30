@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:elite-pets": "node dist/elite-pets/server/server.mjs",
+    "build:ssr:elite-pets": "ng build && ng run elite-pets:server",
     "dev": "ng serve"
   },
   "private": true,

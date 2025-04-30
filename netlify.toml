@@ -1,5 +1,5 @@
 [build]
-  command = "ng build"
+  command = "ng build && ng run elite-pets:server"
   publish = "dist/elite-pets/browser"
 
 [[plugins]]
@@ -9,3 +9,7 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[dev]
+  command = "ng serve"
+  targetPort = 4200
