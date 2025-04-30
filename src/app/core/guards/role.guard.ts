@@ -9,6 +9,13 @@ export class RoleGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
+    const users = this.authService.getAllUsers();
+
+    // Si no hay usuarios, permitir acceso al registro (primer usuario)
+    if (users.length === 0 && route.routeConfig?.path === 'register') {
+      return true;
+    }
+
     const currentUser = this.authService.currentUserValue;
     const requiredRole = route.data['role'];
 
@@ -22,20 +29,6 @@ export class RoleGuard implements CanActivate {
     if (requiredRole && currentUser.role !== requiredRole) {
       this.router.navigate(['/dashboard']);
       return false;
-    }
-
-    // Caso especial para registro
-    if (route.routeConfig?.path === 'register') {
-      const users = this.authService.getAllUsers();
-      // Si no hay usuarios, permitir acceso (primer usuario)
-      if (users.length === 0) {
-        return true;
-      }
-      // Si el usuario no es admin, redirigir
-      if (currentUser.role !== 'admin') {
-        this.router.navigate(['/dashboard']);
-        return false;
-      }
     }
 
     return true;
