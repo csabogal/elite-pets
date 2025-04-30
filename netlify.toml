@@ -1,0 +1,11 @@
+[build]
+  command = "ng build"
+  publish = "dist/elite-pets/browser"
+
+[[plugins]]
+  package = "@netlify/angular-runtime"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
