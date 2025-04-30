@@ -180,7 +180,7 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.m
 
 ## Autor ✒️
 
-- **[Tu Nombre]** - _Desarrollo Inicial_ - [tu-usuario](https://github.com/tu-usuario)
+- **Camilo Sabogal López** - _Desarrollo Inicial_ - [csabogal](https://github.com/tu-usuario)
 
 ## Agradecimientos 🎁
 
