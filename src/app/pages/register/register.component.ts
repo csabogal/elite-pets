@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -16,7 +16,9 @@ export class RegisterComponent {
     email: '',
     password: '',
     confirmPassword: '',
+    isAdmin: false,
   };
+
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -30,7 +32,8 @@ export class RegisterComponent {
     if (
       this.authService.register(
         this.registerData.email,
-        this.registerData.password
+        this.registerData.password,
+        this.registerData.isAdmin
       )
     ) {
       this.router.navigate(['/dashboard']);

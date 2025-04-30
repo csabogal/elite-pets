@@ -1,0 +1,44 @@
+<main class="users-page">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a routerLink="/dashboard">Dashboard</a> / Gestión de Usuarios
+    </nav>
+
+    <header class="page-header">
+      <h1>Gestión de Usuarios</h1>
+      <button class="cta-button" routerLink="/register">Agregar Usuario</button>
+    </header>
+
+    <div class="users-grid">
+      <div class="user-card" *ngFor="let user of users">
+        <div class="user-info">
+          <h3>{{ user.email }}</h3>
+          <span class="role-badge" [class.admin]="user.role === 'admin'">
+            {{ user.role }}
+          </span>
+        </div>
+        <div class="user-actions" *ngIf="user.id !== currentUser?.id">
+          <button class="edit-button" (click)="updateUserRole(user)">
+            Cambiar a {{ user.role === "admin" ? "viewer" : "admin" }}
+          </button>
+          <button class="delete-button" (click)="deleteUser(user)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="users.length === 0">
+      <p>No hay usuarios registrados</p>
+      <button class="cta-button" routerLink="/register">Agregar Usuario</button>
+    </div>
+  </div>
+
+  <app-confirm-modal
+    [show]="showDeleteModal"
+    title="Eliminar Usuario"
+    message="¿Estás seguro de que quieres eliminar este usuario?"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-modal>
+</main>

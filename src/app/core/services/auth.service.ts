@@ -75,7 +75,7 @@ export class AuthService {
     }
   }
 
-  register(email: string, password: string): boolean {
+  register(email: string, password: string, isAdmin: boolean = false): boolean {
     try {
       if (!this.isBrowser) return false;
 
@@ -87,10 +87,10 @@ export class AuthService {
       }
 
       const newUser: User = {
-        id: users.length + 1,
+        id: Date.now().toString(),
         email,
         password,
-        role: 'viewer',
+        role: users.length === 0 ? 'admin' : isAdmin ? 'admin' : 'viewer',
       };
 
       users.push(newUser);
@@ -105,15 +105,58 @@ export class AuthService {
     }
   }
 
-  logout() {
+  getAllUsers(): User[] {
     try {
-      if (this.isBrowser) {
-        this.removeFromLocalStorage('currentUser');
-        this.currentUserSubject.next(null);
-        this.router.navigate(['/login']);
-      }
+      if (!this.isBrowser) return [];
+      const usersString = this.getFromLocalStorage('users');
+      return usersString ? JSON.parse(usersString) : [];
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error('Error getting users:', error);
+      return [];
+    }
+  }
+
+  deleteUser(id: string): boolean {
+    try {
+      if (!this.isBrowser) return false;
+
+      const users = this.getAllUsers();
+      const index = users.findIndex((u) => u.id === id);
+
+      if (index === -1) return false;
+
+      users.splice(index, 1);
+      this.setInLocalStorage('users', JSON.stringify(users));
+      return true;
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      return false;
+    }
+  }
+
+  updateUserRole(id: string, newRole: 'admin' | 'viewer'): boolean {
+    try {
+      if (!this.isBrowser) return false;
+
+      const users = this.getAllUsers();
+      const user = users.find((u) => u.id === id);
+
+      if (!user) return false;
+
+      user.role = newRole;
+      this.setInLocalStorage('users', JSON.stringify(users));
+      return true;
+    } catch (error) {
+      console.error('Error updating user role:', error);
+      return false;
+    }
+  }
+
+  public logout(): void {
+    if (this.isBrowser) {
+      this.removeFromLocalStorage('currentUser');
+      this.currentUserSubject.next(null);
+      this.router.navigate(['/']);
     }
   }
 }

@@ -63,6 +63,27 @@ header {
                         background-color: rgba(255, 255, 255, 0.2);
                     }
                 }
+
+                .logout-btn {
+                    background-color: #ff4444;
+                    color: white;
+                    border: none;
+                    padding: var(--spacing-xs) var(--spacing-sm);
+                    border-radius: var(--border-radius-sm);
+                    cursor: pointer;
+                    font-weight: 500;
+                    transition: all var(--transition-speed) ease;
+                    font-family: inherit;
+
+                    &:hover {
+                        background-color: #cc0000;
+                        transform: translateY(-1px);
+                    }
+
+                    &:active {
+                        transform: translateY(0);
+                    }
+                }
             }
         }
     }

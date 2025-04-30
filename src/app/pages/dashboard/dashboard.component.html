@@ -1,29 +1,137 @@
 <main class="dashboard">
   <div class="container">
     <header class="dashboard-header">
-      <h1>Bienvenido a Elite Pets</h1>
+      <h1>¡Bienvenido a Elite Pets!</h1>
       <div class="user-info">
-        <span>{{ currentUser?.email }}</span>
-        <button class="logout-button" (click)="logout()">Cerrar Sesión</button>
+        <span>
+          <i class="fas fa-user"></i>
+          {{ currentUser?.email }}
+        </span>
+        <span class="role-badge">
+          <i class="fas fa-shield-alt"></i>
+          {{ currentUser?.role | titlecase }}
+        </span>
       </div>
     </header>
 
+    <!-- Panel de Estadísticas -->
+    <section class="stats-panel">
+      <div class="stat-card">
+        <h3>
+          <i class="fas fa-paw"></i>
+          Mascotas Totales
+        </h3>
+        <div class="stat-value">{{ totalPets }}</div>
+      </div>
+
+      <div class="stat-card" *ngIf="isAdmin">
+        <h3>
+          <i class="fas fa-users"></i>
+          Usuarios Registrados
+        </h3>
+        <div class="stat-value">{{ totalUsers }}</div>
+      </div>
+    </section>
+
+    <!-- Estadísticas para administradores -->
+    <section class="stats-detail" *ngIf="isAdmin">
+      <h2>
+        <i class="fas fa-chart-pie"></i>
+        Distribución de Mascotas
+      </h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>
+            <i class="fas fa-dog"></i>
+            Perros
+          </h3>
+          <div class="stat-value">{{ petStats.dogs }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>
+            <i class="fas fa-cat"></i>
+            Gatos
+          </h3>
+          <div class="stat-value">{{ petStats.cats }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>
+            <i class="fas fa-feather"></i>
+            Otros
+          </h3>
+          <div class="stat-value">{{ petStats.others }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Acciones Rápidas -->
     <section class="quick-actions">
-      <h2>Acciones Rápidas</h2>
+      <h2>
+        <i class="fas fa-bolt"></i>
+        Acciones Rápidas
+      </h2>
       <div class="cards-grid">
         <div class="card" routerLink="/pets">
-          <h3>Gestionar Mascotas</h3>
-          <p>Administra la información de tus mascotas</p>
+          <h3>
+            <i class="fas fa-paw"></i>
+            Gestionar Mascotas
+          </h3>
+          <p>Administra la información de tus mascotas registradas</p>
         </div>
 
         <div class="card" routerLink="/servicios">
-          <h3>Servicios</h3>
-          <p>Explora nuestros servicios disponibles</p>
+          <h3>
+            <i class="fas fa-concierge-bell"></i>
+            Servicios
+          </h3>
+          <p>Explora nuestra variedad de servicios para mascotas</p>
         </div>
 
         <div class="card" routerLink="/contact">
-          <h3>Contacto</h3>
-          <p>¿Necesitas ayuda? Contáctanos</p>
+          <h3>
+            <i class="fas fa-envelope"></i>
+            Contacto
+          </h3>
+          <p>¿Necesitas ayuda? Nuestro equipo está para asistirte</p>
+        </div>
+
+        <div class="card" routerLink="/register" *ngIf="isAdmin">
+          <h3>
+            <i class="fas fa-user-plus"></i>
+            Registrar Usuario
+          </h3>
+          <p>Crear y gestionar nuevas cuentas de usuario</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mascotas Recientes -->
+    <section class="recent-pets" *ngIf="!isAdmin && recentPets.length > 0">
+      <h2>
+        <i class="fas fa-clock"></i>
+        Tus Mascotas Recientes
+      </h2>
+      <div class="pets-grid">
+        <div class="pet-card" *ngFor="let pet of recentPets">
+          <h3>
+            <i
+              class="fas"
+              [ngClass]="{
+                'fa-dog': pet.type === 'Perro',
+                'fa-cat': pet.type === 'Gato',
+                'fa-paw': pet.type !== 'Perro' && pet.type !== 'Gato'
+              }"
+            ></i>
+            {{ pet.name }}
+          </h3>
+          <p>
+            <i class="fas fa-tag"></i>
+            {{ pet.type }}
+          </p>
+          <p>
+            <i class="fas fa-dna"></i>
+            {{ pet.breed }}
+          </p>
         </div>
       </div>
     </section>

@@ -1,13 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
-  imports: [RouterModule, MatToolbarModule, MatButtonModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
+  styleUrls: ['./header.component.scss'],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
 })
-export class HeaderComponent {}
+export class HeaderComponent implements OnInit {
+  isLoggedIn = false;
+  isAdmin = false;
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    this.authService.currentUser.subscribe((user) => {
+      this.isLoggedIn = !!user;
+      this.isAdmin = user?.role === 'admin';
+    });
+  }
+
+  logout() {
+    this.authService.logout();
+  }
+}

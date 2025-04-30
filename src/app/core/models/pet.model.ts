@@ -1,9 +1,10 @@
 export interface Pet {
-  id?: number;
+  id: string;
   name: string;
-  species: 'perro' | 'gato' | 'otro';
-  breed?: string;
+  type: 'Perro' | 'Gato' | 'Otro';
+  breed: string;
+  species: string;
   age?: number;
   weight?: number;
-  userId: number;
+  userId: string;
 }

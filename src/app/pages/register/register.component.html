@@ -57,6 +57,17 @@
         </span>
       </div>
 
+      <div class="checkbox-group">
+        <label>
+          <input
+            type="checkbox"
+            name="isAdmin"
+            [(ngModel)]="registerData.isAdmin"
+          />
+          Registrar como administrador
+        </label>
+      </div>
+
       <span class="error-message" *ngIf="errorMessage">{{ errorMessage }}</span>
 
       <button

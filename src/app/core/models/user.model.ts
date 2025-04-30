@@ -1,6 +1,6 @@
 export interface User {
-  id?: number;
+  id: string;
   email: string;
   password: string;
-  role?: 'admin' | 'viewer';
+  role: 'admin' | 'viewer';
 }

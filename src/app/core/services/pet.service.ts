@@ -6,64 +6,50 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class PetService {
+  private readonly PETS_KEY = 'pets';
+
   constructor(private authService: AuthService) {}
 
-  private getPets(): Pet[] {
-    try {
-      return JSON.parse(localStorage.getItem('pets') || '[]');
-    } catch (error) {
-      console.error('Error getting pets:', error);
-      return [];
-    }
+  getAllPets(): Pet[] {
+    const petsString = localStorage.getItem(this.PETS_KEY);
+    return petsString ? JSON.parse(petsString) : [];
   }
 
-  private savePets(pets: Pet[]) {
-    try {
-      localStorage.setItem('pets', JSON.stringify(pets));
-    } catch (error) {
-      console.error('Error saving pets:', error);
-    }
-  }
-
-  getUserPets(): Pet[] {
-    const currentUser = this.authService.currentUserValue;
-    if (!currentUser?.id) return [];
-
-    return this.getPets().filter((pet) => pet.userId === currentUser.id);
+  getPetsByUserId(userId: string): Pet[] {
+    const allPets = this.getAllPets();
+    return allPets.filter((pet) => pet.userId === userId);
   }
 
   addPet(pet: Omit<Pet, 'id'>): Pet {
-    const pets = this.getPets();
+    const pets = this.getAllPets();
     const newPet: Pet = {
       ...pet,
-      id: Date.now(), // Usar timestamp para asegurar ID único
+      id: Date.now().toString(),
     };
-
-    console.log('Adding new pet:', newPet); // Para debugging
     pets.push(newPet);
-    this.savePets(pets);
+    localStorage.setItem(this.PETS_KEY, JSON.stringify(pets));
     return newPet;
   }
 
-  updatePet(id: number, pet: Partial<Pet>): boolean {
-    const pets = this.getPets();
+  updatePet(id: string, updatedPet: Pet): boolean {
+    const pets = this.getAllPets();
     const index = pets.findIndex((p) => p.id === id);
-
-    if (index === -1) return false;
-
-    pets[index] = { ...pets[index], ...pet };
-    this.savePets(pets);
-    return true;
+    if (index !== -1) {
+      pets[index] = { ...updatedPet, id };
+      localStorage.setItem(this.PETS_KEY, JSON.stringify(pets));
+      return true;
+    }
+    return false;
   }
 
-  deletePet(id: number): boolean {
-    const pets = this.getPets();
+  deletePet(id: string): boolean {
+    const pets = this.getAllPets();
     const index = pets.findIndex((p) => p.id === id);
-
-    if (index === -1) return false;
-
-    pets.splice(index, 1);
-    this.savePets(pets);
-    return true;
+    if (index !== -1) {
+      pets.splice(index, 1);
+      localStorage.setItem(this.PETS_KEY, JSON.stringify(pets));
+      return true;
+    }
+    return false;
   }
 }

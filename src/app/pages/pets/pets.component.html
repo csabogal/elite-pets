@@ -26,16 +26,11 @@
         </div>
 
         <div class="form-group">
-          <label for="species">Especie:</label>
-          <select
-            id="species"
-            name="species"
-            [(ngModel)]="newPet.species"
-            required
-          >
-            <option value="perro">Perro</option>
-            <option value="gato">Gato</option>
-            <option value="otro">Otro</option>
+          <label for="type">Tipo:</label>
+          <select id="type" [(ngModel)]="newPet.type" name="type" required>
+            <option value="Perro">Perro</option>
+            <option value="Gato">Gato</option>
+            <option value="Otro">Otro</option>
           </select>
         </div>
 
@@ -46,19 +41,24 @@
             id="breed"
             name="breed"
             [(ngModel)]="newPet.breed"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="species">Especie:</label>
+          <input
+            type="text"
+            id="species"
+            name="species"
+            [(ngModel)]="newPet.species"
           />
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label for="age">Edad:</label>
-            <input
-              type="number"
-              id="age"
-              name="age"
-              [(ngModel)]="newPet.age"
-              min="0"
-            />
+            <label for="age">Edad (años):</label>
+            <input type="number" id="age" name="age" [(ngModel)]="newPet.age" />
           </div>
 
           <div class="form-group">
@@ -68,8 +68,6 @@
               id="weight"
               name="weight"
               [(ngModel)]="newPet.weight"
-              min="0"
-              step="0.1"
             />
           </div>
         </div>
@@ -89,14 +87,15 @@
       <div class="pet-card" *ngFor="let pet of pets">
         <div class="pet-info">
           <h3>{{ pet.name }}</h3>
-          <p><strong>Especie:</strong> {{ pet.species }}</p>
-          <p *ngIf="pet.breed"><strong>Raza:</strong> {{ pet.breed }}</p>
+          <p><strong>Tipo:</strong> {{ pet.type }}</p>
+          <p><strong>Raza:</strong> {{ pet.breed }}</p>
+          <p *ngIf="pet.species"><strong>Especie:</strong> {{ pet.species }}</p>
           <p *ngIf="pet.age"><strong>Edad:</strong> {{ pet.age }} años</p>
           <p *ngIf="pet.weight"><strong>Peso:</strong> {{ pet.weight }} kg</p>
         </div>
         <div class="pet-actions">
           <button class="edit-button" (click)="editPet(pet)">Editar</button>
-          <button class="delete-button" (click)="deletePet(pet.id!)">
+          <button class="delete-button" (click)="deletePet(pet.id)">
             Eliminar
           </button>
         </div>

@@ -1,87 +1,78 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Pet } from '../../core/models/pet.model';
 import { PetService } from '../../core/services/pet.service';
 import { AuthService } from '../../core/services/auth.service';
+import { Pet } from '../../core/models/pet.model';
 import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-pets',
+  templateUrl: './pets.component.html',
+  styleUrls: ['./pets.component.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule, ConfirmModalComponent],
-  templateUrl: './pets.component.html',
-  styleUrl: './pets.component.scss',
 })
 export class PetsComponent implements OnInit {
   pets: Pet[] = [];
   showForm = false;
+  showDeleteModal = false;
+  petToDelete: string | null = null;
   isEditing = false;
-
   newPet: Pet = {
+    id: '',
     name: '',
-    species: 'perro',
+    type: 'Perro',
     breed: '',
+    species: '',
+    userId: '',
     age: undefined,
     weight: undefined,
-    userId: 0,
   };
-
-  showDeleteModal = false;
-  petToDelete: number | null = null;
 
   constructor(
     private petService: PetService,
-    private authService: AuthService,
-    private router: Router
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    const currentUser = this.authService.currentUserValue;
-    if (!currentUser) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    this.newPet.userId = currentUser.id || 0;
     this.loadPets();
   }
 
-  private loadPets() {
-    this.pets = this.petService.getUserPets();
-    console.log('Loaded pets:', this.pets); // Para debugging
+  loadPets() {
+    const currentUser = this.authService.currentUserValue;
+    if (currentUser) {
+      this.pets = this.petService.getPetsByUserId(currentUser.id);
+    }
   }
 
   onSubmit() {
-    console.log('Submitting pet:', this.newPet); // Para debugging
     const currentUser = this.authService.currentUserValue;
-    if (!currentUser?.id) {
-      console.error('No user ID found'); // Para debugging
-      return;
-    }
+    if (!currentUser) return;
 
-    // Asegurarnos de que el userId esté establecido
-    this.newPet.userId = currentUser.id;
+    const petToAdd = {
+      ...this.newPet,
+      userId: currentUser.id,
+    };
 
-    if (this.isEditing && this.newPet.id) {
-      this.petService.updatePet(this.newPet.id, this.newPet);
+    if (this.isEditing) {
+      this.petService.updatePet(this.newPet.id, petToAdd);
     } else {
-      const addedPet = this.petService.addPet(this.newPet);
-      console.log('Added pet:', addedPet); // Para debugging
+      const { id, ...petWithoutId } = petToAdd;
+      this.petService.addPet(petWithoutId);
     }
 
-    this.loadPets();
     this.resetForm();
+    this.loadPets();
   }
 
   editPet(pet: Pet) {
     this.newPet = { ...pet };
-    this.showForm = true;
     this.isEditing = true;
+    this.showForm = true;
   }
 
-  deletePet(id: number) {
+  deletePet(id: string) {
     this.petToDelete = id;
     this.showDeleteModal = true;
   }
@@ -102,14 +93,16 @@ export class PetsComponent implements OnInit {
 
   resetForm() {
     this.newPet = {
+      id: '',
       name: '',
-      species: 'perro',
+      type: 'Perro',
       breed: '',
+      species: '',
+      userId: '',
       age: undefined,
       weight: undefined,
-      userId: 0,
     };
-    this.showForm = false;
     this.isEditing = false;
+    this.showForm = false;
   }
 }
