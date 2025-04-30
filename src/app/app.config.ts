@@ -1,16 +1,13 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { provideZoneChangeDetection } from '@angular/core';
-import {
-  provideClientHydration,
-  withEventReplay,
-} from '@angular/platform-browser';
+import { AuthService } from './core/services/auth.service';
+import { PetService } from './core/services/pet.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideClientHydration(withEventReplay()),
+    AuthService, // Agregamos el servicio aquí
+    PetService, // Y también el servicio de mascotas
   ],
 };

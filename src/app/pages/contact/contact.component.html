@@ -1,1 +1,84 @@
-<p>contact works!</p>
+<main>
+  <div class="container">
+    <form id="contact-form" (ngSubmit)="onSubmit()" #contactForm="ngForm">
+      <h2>Contáctanos</h2>
+
+      <div class="form-group">
+        <label for="name">Nombre:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          [(ngModel)]="contactData.name"
+          required
+          #name="ngModel"
+        />
+        <span
+          class="error-message"
+          *ngIf="name.invalid && name.touched && !successMessage"
+        >
+          Por favor ingresa tu nombre
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo Electrónico:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="contactData.email"
+          required
+          email
+          #email="ngModel"
+        />
+        <span
+          class="error-message"
+          *ngIf="email.invalid && email.touched && !successMessage"
+        >
+          Por favor ingresa un correo válido
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="subject">Asunto:</label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          [(ngModel)]="contactData.subject"
+          #subject="ngModel"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="message">Mensaje:</label>
+        <textarea
+          id="message"
+          name="message"
+          [(ngModel)]="contactData.message"
+          required
+          rows="5"
+          #message="ngModel"
+        ></textarea>
+        <span
+          class="error-message"
+          *ngIf="message.invalid && message.touched && !successMessage"
+        >
+          Por favor ingresa tu mensaje
+        </span>
+      </div>
+
+      <span class="error-message" *ngIf="errorMessage && !successMessage">{{
+        errorMessage
+      }}</span>
+      <span class="success-message" *ngIf="successMessage">{{
+        successMessage
+      }}</span>
+
+      <button type="submit" class="cta-button" [disabled]="contactForm.invalid">
+        Enviar Mensaje
+      </button>
+    </form>
+  </div>
+</main>

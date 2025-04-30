@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
+import { ServiciosComponent } from './pages/servicios/servicios.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -8,10 +9,11 @@ import { ContactComponent } from './pages/contact/contact.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'servicios', component: ServiciosComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'pets', component: PetsComponent },
   { path: 'contact', component: ContactComponent },
-  { path: '**', redirectTo: '' }, // Redirige rutas no encontradas al home
+  { path: '**', redirectTo: '' },
 ];

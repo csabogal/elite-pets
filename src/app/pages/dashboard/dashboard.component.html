@@ -1,1 +1,31 @@
-<p>dashboard works!</p>
+<main class="dashboard">
+  <div class="container">
+    <header class="dashboard-header">
+      <h1>Bienvenido a Elite Pets</h1>
+      <div class="user-info">
+        <span>{{ currentUser?.email }}</span>
+        <button class="logout-button" (click)="logout()">Cerrar Sesión</button>
+      </div>
+    </header>
+
+    <section class="quick-actions">
+      <h2>Acciones Rápidas</h2>
+      <div class="cards-grid">
+        <div class="card" routerLink="/pets">
+          <h3>Gestionar Mascotas</h3>
+          <p>Administra la información de tus mascotas</p>
+        </div>
+
+        <div class="card" routerLink="/servicios">
+          <h3>Servicios</h3>
+          <p>Explora nuestros servicios disponibles</p>
+        </div>
+
+        <div class="card" routerLink="/contact">
+          <h3>Contacto</h3>
+          <p>¿Necesitas ayuda? Contáctanos</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

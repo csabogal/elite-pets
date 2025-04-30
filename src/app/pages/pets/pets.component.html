@@ -1,1 +1,121 @@
-<p>pets works!</p>
+<main class="pets-page">
+  <div class="container">
+    <header class="page-header">
+      <h1>Gestión de Mascotas</h1>
+      <button class="cta-button" (click)="showForm = true" *ngIf="!showForm">
+        Agregar Mascota
+      </button>
+    </header>
+
+    <div class="pet-form" *ngIf="showForm">
+      <h2>{{ isEditing ? "Editar" : "Agregar" }} Mascota</h2>
+      <form (ngSubmit)="onSubmit()" #petForm="ngForm">
+        <div class="form-group">
+          <label for="name">Nombre:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="newPet.name"
+            required
+            #name="ngModel"
+          />
+          <span class="error-message" *ngIf="name.invalid && name.touched">
+            El nombre es requerido
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="species">Especie:</label>
+          <select
+            id="species"
+            name="species"
+            [(ngModel)]="newPet.species"
+            required
+          >
+            <option value="perro">Perro</option>
+            <option value="gato">Gato</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="breed">Raza:</label>
+          <input
+            type="text"
+            id="breed"
+            name="breed"
+            [(ngModel)]="newPet.breed"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="age">Edad:</label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              [(ngModel)]="newPet.age"
+              min="0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="weight">Peso (kg):</label>
+            <input
+              type="number"
+              id="weight"
+              name="weight"
+              [(ngModel)]="newPet.weight"
+              min="0"
+              step="0.1"
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="cta-button" [disabled]="petForm.invalid">
+            {{ isEditing ? "Actualizar" : "Agregar" }}
+          </button>
+          <button type="button" class="secondary-button" (click)="resetForm()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="pets-grid" *ngIf="pets.length > 0">
+      <div class="pet-card" *ngFor="let pet of pets">
+        <div class="pet-info">
+          <h3>{{ pet.name }}</h3>
+          <p><strong>Especie:</strong> {{ pet.species }}</p>
+          <p *ngIf="pet.breed"><strong>Raza:</strong> {{ pet.breed }}</p>
+          <p *ngIf="pet.age"><strong>Edad:</strong> {{ pet.age }} años</p>
+          <p *ngIf="pet.weight"><strong>Peso:</strong> {{ pet.weight }} kg</p>
+        </div>
+        <div class="pet-actions">
+          <button class="edit-button" (click)="editPet(pet)">Editar</button>
+          <button class="delete-button" (click)="deletePet(pet.id!)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="pets.length === 0">
+      <p>No tienes mascotas registradas</p>
+      <button class="cta-button" (click)="showForm = true">
+        Agregar tu primera mascota
+      </button>
+    </div>
+
+    <app-confirm-modal
+      [show]="showDeleteModal"
+      title="Eliminar Mascota"
+      message="¿Estás seguro de que quieres eliminar esta mascota?"
+      (confirm)="confirmDelete()"
+      (cancel)="cancelDelete()"
+    ></app-confirm-modal>
+  </div>
+</main>
